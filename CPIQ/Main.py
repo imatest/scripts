@@ -76,10 +76,3 @@ if doProcess:
     pp = pprint.PrettyPrinter(indent=4)
     pp.pprint(data)
 
-    #
-    print('Combined JNDS:')
-    for phone in phones:
-        score = multivariateScore(data[phone])
-        combined_QL = data[phone]['Combined_QL']
-        print(phone + ", %.0f" ) % percentScoreClean(score)
-

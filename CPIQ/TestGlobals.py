@@ -15,11 +15,9 @@ op_mode = ImatestLibrary.OP_MODE_SEPARATE
 led5k = "5000KLED_1000lux"
 tl84 = "TL84_100lux"
 tung = "Tung_10lux"
-lightConditions = [led5k, tl84, tung]
+light_conditions = [led5k, tl84, tung]
 ERROR_RESULT = -65535
 VN_NOT_FOUND = -65534
-
-
 
 ################### Support Functions #####################
 

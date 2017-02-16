@@ -6,7 +6,8 @@ from TestGlobals import *
 ##############
 # PROCESSING #
 ##############
-def processPhone(phone):
+
+def process_phone(phone):
     filename = os.path.join(images_dir, phone, phone + '.json')
     TB_QL = {}
     CL_QL = {}
@@ -19,7 +20,7 @@ def processPhone(phone):
         print("Can't read input file '" + filename + "'")
         return
 
-    global esfriso,multitest,dotpattern,random,uniformity,lightConditions
+    global esfriso,multitest,dotpattern,random,uniformity,light_conditions
 
     print('Calculating Metrics for '+phone+ ' *****************************')
     # CU
@@ -32,42 +33,42 @@ def processPhone(phone):
 
     # CL
     try:
-        multitestResults = data['multitest']
+        multitest_results = data['multitest']
         CL_QL = {}
-        for lightSource in multitestResults:
+        for light_source in multitest_results:
             try:
-                CL_QL[lightSource] = multitestResults[lightSource]['CPIQ_chroma_quality_loss'][0]
-                print('CL QL ' + str(CL_QL[lightSource]) + ' JND at ' + lightSource)
+                CL_QL[light_source] = multitest_results[light_source]['CPIQ_chroma_quality_loss'][0]
+                print('CL QL ' + str(CL_QL[light_source]) + ' JND at ' + light_source)
             except:
-                print("***ERROR Can't find CL at " + lightSource)
+                print("***ERROR Can't find CL at " + light_source)
     except:
         print("***ERROR Can't find CL")
 
     # LGD
     try:
-        dotpatternResults = data['dotpattern']
-        LGD_QL = dotpatternResults[led5k]['CPIQ']['lensGeometricDistortion']['qualityLoss'][0]
+        dotpattern_results = data['dotpattern']
+        LGD_QL = dotpattern_results[led5k]['CPIQ']['lensGeometricDistortion']['qualityLoss'][0]
         print('LGD QL ' + str(LGD_QL) + ' JND')
     except:
         print("***ERROR Can't find LGD")
 
     # LCD
     try:
-        LCD_QL = dotpatternResults[led5k]['CPIQ']['lateralChromaticDisplacement']['qualityLoss'][0]
+        LCD_QL = dotpattern_results[led5k]['CPIQ']['lateralChromaticDisplacement']['qualityLoss'][0]
         print('LCD QL ' + str(LCD_QL) + ' JND')
     except:
         print("***ERROR Can't find LCD")
 
     # TB
     try:
-        randomResults = data['random']
+        random_results = data['random']
         TB_QL = {}
-        for lightSource in randomResults:
+        for light_source in random_results:
             try:
-                TB_QL[lightSource] = randomResults[lightSource]['CPIQ']['textureComputerMonitor']['qualityLoss'][0]
-                print('TB QL ' + str(TB_QL[lightSource]) + ' JND at ' + lightSource)
+                TB_QL[light_source] = random_results[light_source]['CPIQ']['textureComputerMonitor']['qualityLoss'][0]
+                print('TB QL ' + str(TB_QL[light_source]) + ' JND at ' + light_source)
             except:
-                print("***ERROR Can't find TB at " + lightSource)
+                print("***ERROR Can't find TB at " + light_source)
     except:
         print("***ERROR Can't find TB")
 
@@ -76,21 +77,21 @@ def processPhone(phone):
         esfrisoResults = data['esfriso']
         SFR_QL = {}
         VN_QL = {}
-        for lightSource in esfrisoResults:
+        for light_source in esfrisoResults:
             # SFR
             try:
-                SFR_QL[lightSource] = esfrisoResults[lightSource]['CPIQ']['sfrComputerMonitor']['qualityLoss'][0] # +
-                #      esfrisoResults[lightSource]['CPIQ']['sfrComputerMonitor']['qualityLoss'][1]) / 2
-                print('SFR QL ' + str(SFR_QL[lightSource]) + ' JND at ' + lightSource)
+                SFR_QL[light_source] = esfrisoResults[light_source]['CPIQ']['sfrComputerMonitor']['qualityLoss'][0] # +
+                #      esfrisoResults[light_source]['CPIQ']['sfrComputerMonitor']['qualityLoss'][1]) / 2
+                print('SFR QL ' + str(SFR_QL[light_source]) + ' JND at ' + light_source)
             except:
-                print("***ERROR Can't find SFR at " + lightSource)
+                print("***ERROR Can't find SFR at " + light_source)
 
             # VN
             try:
-                VN_QL[lightSource] = esfrisoResults[lightSource]['VN_CPIQ_Quality_Loss_QL_1'][0]
-                print('VN QL ' + str(VN_QL[lightSource]) + ' JND')
+                VN_QL[light_source] = esfrisoResults[light_source]['VN_CPIQ_Quality_Loss_QL_1'][0]
+                print('VN QL ' + str(VN_QL[light_source]) + ' JND')
             except:
-                print("Missing VN at " + lightSource)
+                print("Missing VN at " + light_source)
     except:
         print("***ERROR Can't find eSFR ISO")
 
@@ -103,30 +104,30 @@ def processPhone(phone):
     TB_combined = 0
     CL_combined = 0
     VN_QL['count'] = 0
-    for lightSource in lightConditions:
+    for light_source in light_conditions:
         # VN
         try:
-            VN_combined = VN_combined + VN_QL[lightSource]
+            VN_combined = VN_combined + VN_QL[light_source]
             VN_QL['count'] = VN_QL['count'] + 1
         except:
-            print(' *** WARNING missing ' + lightSource + ' VN')
+            print(' *** WARNING missing ' + light_source + ' VN')
 
         # SFR
         try:
-            SFR_combined = SFR_combined + SFR_QL[lightSource]
+            SFR_combined = SFR_combined + SFR_QL[light_source]
         except:
-            print(' *** ERROR missing ' + lightSource + ' SFR')
+            print(' *** ERROR missing ' + light_source + ' SFR')
 
         # TB
         try:
-            TB_combined = TB_combined + TB_QL[lightSource]
+            TB_combined = TB_combined + TB_QL[light_source]
         except:
-            print(' *** ERROR missing ' + lightSource + ' TB')
+            print(' *** ERROR missing ' + light_source + ' TB')
         # CL
         try:
-            CL_combined = CL_combined + CL_QL[lightSource]
+            CL_combined = CL_combined + CL_QL[light_source]
         except:
-            print(' *** ERROR missing ' + lightSource + ' CL')
+            print(' *** ERROR missing ' + light_source + ' CL')
 
     try:
         if VN_QL['count'] > 0:
@@ -138,9 +139,6 @@ def processPhone(phone):
     except:
         raise('Rebalancing error')
 
-    #except:
-    #    print("***ERROR Can't Combine Light Dependant score")
-
     # Finish the calcs
     try:
         combined_QL = combined_QL  + VN_combined + SFR_combined + TB_combined + CL_combined
@@ -150,30 +148,3 @@ def processPhone(phone):
         print('***ERROR computing QL')
     #  MAIN #######
 
-def multivariateScore(dev):
-    scores = [dev['SFR_QL'][led5k],dev['SFR_QL'][tung],dev['SFR_QL'][tl84],
-              dev['CL_QL'][led5k], dev['CL_QL'][tung], dev['CL_QL'][tl84],
-              dev['VN_QL'][led5k], dev['VN_QL'][tung], dev['VN_QL'][tl84],
-              dev['TB_QL'][led5k], dev['TB_QL'][tung], dev['TB_QL'][tl84],
-              dev['CU_QL'],        dev['CU_QL'],       dev['CU_QL'],
-              dev['LGD_QL'],       dev['LGD_QL'],      dev['LGD_QL'],
-              dev['LCD_QL'],       dev['LCD_QL'],      dev['LCD_QL']]
-
-    scoreMod = []
-    deltaQmax = 30
-    quotientDividend = 16.9
-    Nm = 1 + 2 * tanh(deltaQmax/quotientDividend)
-
-    for score in scores:
-        if score < 0:
-            print("** ERROR negative score: " + str(score))
-            score=0
-        scoreMod.append(score ** Nm)
-
-    return -((sum(scoreMod)) ** (1/Nm))
-
-def percentScoreAugmented(combined_JND):
-    return 100+(4*combined_JND/7)
-
-def percentScoreClean(multivariate_JND):
-    return 100+multivariate_JND
